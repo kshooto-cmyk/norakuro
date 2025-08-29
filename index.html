@@ -874,7 +874,7 @@
 
         // 注文リストから商品を削除
         function removeFromOrderList(productId) {
-            orderList = orderList.filter(item => item.id !== productId);
+            orderList = orderList.filter(item => item.id !== parseInt(productId));
             localStorage.setItem('orderList', JSON.stringify(orderList));
             displayOrderList();
             calculateTotal();
