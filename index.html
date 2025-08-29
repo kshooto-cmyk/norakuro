@@ -809,7 +809,7 @@
         // 注文リストへの追加
         function addToOrderList(productId) {
             const quantity = parseInt(document.getElementById(`quantity-${productId}`).textContent);
-            const product = products.find(p => p.id === productId);
+            const product = products.find(p => p.id === parseInt(productId));
             const existingItem = orderList.find(item => item.id === productId);
             
             if (existingItem) {
