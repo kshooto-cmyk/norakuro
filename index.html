@@ -39,139 +39,91 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        header .logo {
-            font-family: 'Sawarabi Mincho', serif;
+        header h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            letter-spacing: 0.1rem;
-        }
-
-        header nav ul {
-            list-style: none;
-            display: flex;
-        }
-
-        header nav li {
-            margin-left: 2rem;
-        }
-
-        header nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        header nav a:hover {
             color: var(--accent-gold);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 2rem;
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
         }
 
         .page-content {
-            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 200px);
         }
 
-        .page-content.active {
-            display: block;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .hero {
-            background-color: var(--light-gray);
-            text-align: center;
-            padding: 4rem 2rem;
-            border-bottom: 2px solid var(--accent-gold);
-            margin-top: -80px;
-        }
-
-        .hero h1 {
-            font-family: 'Noto Serif JP', serif;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--main-blue);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--dark-gray);
-        }
-
-        #home-page {
-            display: block;
-        }
-
-        #products-section {
-            padding: 2rem 0;
-        }
-
-        #category-filter {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
+        .category-filter {
             margin-bottom: 2rem;
+            display: flex;
             flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .category-btn {
+            background-color: var(--light-gray);
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover, .category-btn.active {
             background-color: var(--main-blue);
             color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
-        .category-btn:hover {
-            background-color: var(--accent-gold);
-            transform: translateY(-2px);
-        }
-
-        .category-btn.active {
-            background-color: var(--accent-gold);
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-
-        #products-container {
+        .products-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
-            place-items: center;
+            margin-top: 2rem;
         }
 
         .product-card {
-            background-color: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            max-width: 320px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+            position: relative;
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .product-image-slider {
             position: relative;
             width: 100%;
             height: 200px;
+            margin-bottom: 1rem;
             overflow: hidden;
+            border-radius: 3px;
         }
 
         .product-image {
@@ -188,525 +140,1129 @@
         .slider-controls {
             position: absolute;
             bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
             display: flex;
+            justify-content: center;
             gap: 5px;
         }
 
         .slider-dot {
             width: 10px;
             height: 10px;
-            background-color: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s;
         }
 
         .slider-dot.active {
             background-color: white;
         }
 
-        .product-card .product-info {
-            padding: 1rem;
-        }
-
-        .product-card h3 {
+        .product-title {
             font-size: 1.2rem;
-            margin: 1rem 1rem 0.5rem;
-        }
-        
-        .product-card .product-description {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 0 1rem 1rem;
-            height: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-
-        .product-card .product-price {
-            font-size: 1.3rem;
-            font-weight: 700;
+            margin-bottom: 0.5rem;
             color: var(--main-blue);
-            margin: 0 1rem 1rem;
         }
 
-        .product-price .discount {
+        .product-description {
             font-size: 0.9rem;
-            color: #999;
+            margin-bottom: 1rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            color: var(--main-blue);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .discount {
+            color: #e74c3c;
             text-decoration: line-through;
             margin-right: 0.5rem;
         }
-        
+
         .quantity-controls {
             display: flex;
             align-items: center;
-            justify-content: center;
             margin-bottom: 1rem;
         }
 
         .quantity-btn {
-            background-color: #eee;
-            border: 1px solid #ccc;
+            background-color: var(--main-blue);
+            color: white;
+            border: none;
             width: 30px;
             height: 30px;
-            font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .quantity-btn:hover {
-            background-color: #ddd;
+            font-size: 1.2rem;
+            border-radius: 3px;
         }
 
         .quantity-display {
-            display: inline-block;
+            margin: 0 0.5rem;
             width: 40px;
             text-align: center;
-            font-size: 1rem;
         }
 
         .add-to-list-btn {
-            display: block;
-            width: calc(100% - 2rem);
-            margin: 0 1rem 1rem;
-            padding: 0.8rem;
             background-color: var(--accent-gold);
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            width: 100%;
+            transition: background-color 0.3s;
+            border-radius: 3px;
+            font-family: inherit;
         }
 
         .add-to-list-btn:hover {
-            background-color: #a38c60;
+            background-color: #a38d5c;
         }
 
-        .order-list-button {
+        .floating-order-list {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            width: 60px;
-            height: 60px;
+            z-index: 1000;
+        }
+
+        #order-list-button {
             background-color: var(--main-blue);
             color: white;
-            border-radius: 50%;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-family: inherit;
+            font-size: 1rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            z-index: 999;
+            gap: 0.5rem;
         }
 
-        .order-list-button:hover {
-            background-color: var(--accent-gold);
-        }
-
-        .order-list-button .material-icons {
-            font-size: 1.5rem;
-        }
-
-        #order-count {
-            font-size: 0.8rem;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: red;
+        footer {
+            background-color: var(--main-blue);
             color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
         }
 
-        /* About Page */
-        #about-page, #privacy-page, #law-page {
-            padding: 2rem;
-        }
-        
-        #about-page h2, #privacy-page h2, #law-page h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--accent-gold);
-            padding-left: 10px;
-        }
-
-        #about-page p, #privacy-page p, #law-page p {
+        .footer-nav {
             margin-bottom: 1rem;
         }
 
-        /* Order Page */
-        #order-page h2 {
-            text-align: center;
-            margin-bottom: 2rem;
+        .footer-nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
         }
 
-        #order-items {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .footer-nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* 注文リストページのスタイル */
+        .order-list-container {
+            max-width: 800px;
+            margin: 2rem auto;
         }
 
         .order-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        .order-item img {
-            border-radius: 4px;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
         }
 
         .order-item-info {
             flex-grow: 1;
         }
 
-        .order-item-info h3 {
-            font-size: 1.1rem;
-        }
-
-        .order-item-info p {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .order-item p {
-            font-weight: bold;
-        }
-
-        .order-item .remove-item {
+        .remove-item {
+            color: #e74c3c;
             background: none;
             border: none;
-            font-size: 1.5rem;
-            color: #999;
             cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .remove-item:hover {
-            color: red;
+            font-size: 1.2rem;
         }
 
         .order-summary {
             margin-top: 2rem;
             padding: 1.5rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
             background-color: var(--light-gray);
+            border-radius: 5px;
+            border-left: 4px solid var(--accent-gold);
         }
 
-        .order-summary table {
-            width: 100%;
-            border-collapse: collapse;
+        /* フォームスタイル */
+        .order-form {
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .order-summary td {
-            padding: 0.5rem;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        .order-summary td:last-child {
-            text-align: right;
-            font-weight: bold;
-        }
-
-        .order-summary tr:last-child td {
-            font-size: 1.2rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: bold;
             color: var(--main-blue);
         }
 
-        .order-form {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: var(--light-gray);
-        }
-
-        .order-form h3 {
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--accent-gold);
-            padding-left: 8px;
-        }
-
-        .order-form label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        
         .required::after {
-            content: '*';
-            color: red;
-            margin-left: 4px;
+            content: " *";
+            color: #e74c3c;
         }
 
-        .order-form input,
-        .order-form select,
-        .order-form textarea {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            padding: 0.7rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
             border-radius: 4px;
             font-family: inherit;
         }
-        
-        .order-form input[type="text"],
-        .order-form input[type="email"],
-        .order-form input[type="tel"] {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        
-        .search-address-group {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .search-address-group input {
-            flex-grow: 1;
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
         }
 
-        .search-btn {
-            padding: 0.5rem 1rem;
-            background-color: var(--main-blue);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .search-btn:hover {
-            background-color: #0c1c40;
-        }
-        
-        .honeypot {
-            position: absolute;
-            left: -9999px;
+        .form-section-title {
+            color: var(--main-blue);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-gold);
         }
 
-        .order-form .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 1rem;
+        .honey-pot {
+            display: none;
+        }
+
+        .submit-btn {
             background-color: var(--accent-gold);
             color: white;
             border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
             border-radius: 5px;
-            font-size: 1.2rem;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .submit-btn:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
+            width: 100%;
+            font-family: inherit;
+            margin-top: 1rem;
         }
 
-        .submit-btn:hover:enabled {
-            background-color: #a38c60;
-        }
-        
-        .loading {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #fff;
-            border-radius: 50%;
-            width: 1em;
-            height: 1em;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 0.5em;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .submit-btn:hover {
+            background-color: #a38d5c;
         }
 
-        footer {
-            background-color: var(--dark-gray);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        footer nav ul {
-            list-style: none;
+        /* 郵便番号検索ボタン */
+        .postal-code-search {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
+            gap: 0.5rem;
         }
 
-        footer nav a {
+        .postal-code-search input {
+            flex: 1;
+        }
+
+        .search-btn {
+            background-color: var(--main-blue);
             color: white;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
         }
 
-        footer nav a:hover {
-            color: var(--accent-gold);
-        }
-
+        /* レスポンシブデザイン */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
+                text-align: center;
                 padding: 1rem;
-                position: relative;
-                padding-top: 90px;
-            }
-
-            header nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-                margin-top: 1rem;
-            }
-
-            header nav li {
-                margin: 0.5rem 1rem;
             }
             
-            #products-container {
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 0.5rem;
+            }
+            
+            .products-container {
                 grid-template-columns: 1fr;
             }
+            
+            .page-content {
+                padding: 1rem;
+            }
+
+            .footer-nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* 政策ページの上部余白を追加 */
+            .policy-content, .about-content {
+                padding-top: 1rem;
+            }
+        }
+
+        /* 政策ページ用スタイル */
+        .policy-content, .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+        }
+        
+        .policy-content section, .about-content section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .policy-content h3, .about-content h3 {
+            color: var(--main-blue);
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--accent-gold);
+            font-size: 1.1rem;
+        }
+        
+        .policy-content ul, .about-content ul {
+            padding-left: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .policy-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .policy-content th, .policy-content td {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .policy-content th {
+            background-color: var(--light-gray);
+            color: var(--main-blue);
+            width: 30%;
+        }
+        
+        .about-content {
+            line-height: 1.8;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+
+        /* ローディングインジケーター */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            padding: 2rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-
     <header>
-        <div class="logo">乃ら蔵堂</div>
+        <h1>ペンと手帖の、乃ら蔵堂</h1>
         <nav>
             <ul>
-                <li><a href="#home-page">ホーム</a></li>
-                <li><a href="#about-page">お店について</a></li>
-                <li><a href="#order-page">注文リスト</a></li>
+                <li><a data-page="home">ホーム</a></li>
+                <li><a data-page="about">お店について</a></li>
+                <li><a data-page="order">注文リスト</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="container">
-        
+    <main>
+        <!-- ホームページ -->
         <div id="home-page" class="page-content active">
-            <section class="hero">
-                <h1>心を満たす、書く喜びを。</h1>
-                <p>上質なペンと手帳が、あなたの毎日を彩ります。</p>
-            </section>
-            
-            <section id="products-section">
-                <div id="category-filter">
-                    </div>
-                
-                <div id="products-container">
-                    </div>
-            </section>
+            <h2>商品一覧</h2>
+            <div class="category-filter" id="category-filter">
+                <!-- カテゴリボタンはJavaScriptで動的に生成 -->
+            </div>
+            <div class="products-container" id="products-container">
+                <!-- 商品はJavaScriptで動的に生成 -->
+            </div>
         </div>
-        
-        <div id="about-page" class="page-content hidden">
-            <h2>お店について</h2>
-            <p>「乃ら蔵堂」へようこそ。私たちは、日々の生活を豊かにする上質な文具を厳選してお届けしています。</p>
-            <p>私たちは、単なる道具としての文具ではなく、書くこと、考えることの喜びを再発見するための「相棒」として、お客様に寄り添いたいと考えています。手触りの良い紙、滑らかな書き味のペン。一つひとつに込められた職人の技と想いを感じていただければ幸いです。</p>
-            <p>この場所が、あなたの創造性を刺激し、日々のささやかな幸せを見つけるきっかけとなりますように。</p>
-        </div>
-        
+
+        <!-- 注文リストページ -->
         <div id="order-page" class="page-content hidden">
-            <h2>ご注文リスト</h2>
-            
-            <div id="order-items">
-                </div>
+            <h2>注文リスト</h2>
+            <div id="order-items" class="order-list-container">
+                <!-- 注文商品はJavaScriptで動的に生成 -->
+            </div>
             
             <div class="order-summary">
-                <h3>合計</h3>
-                <table>
-                    <tr>
-                        <td>小計</td>
-                        <td id="subtotal">¥0</td>
-                    </tr>
-                    <tr>
-                        <td>送料（¥2,000以上で無料）</td>
-                        <td id="shipping">¥0</td>
-                    </tr>
-                    <tr>
-                        <td>合計</td>
-                        <td id="total">¥0</td>
-                    </tr>
-                </table>
+                <h3>注文概要</h3>
+                <p>小計: <span id="subtotal">¥0</span></p>
+                <p>送料: <span id="shipping">¥0</span></p>
+                <p>合計: <span id="total">¥0</span></p>
             </div>
             
             <div class="order-form">
-                <h3>ご注文フォーム</h3>
-                <form id="order-form" onsubmit="return false;">
-                    <label for="name" class="required">お名前</label>
-                    <input type="text" id="name" name="name" required>
-                    
-                    <label for="email" class="required">メールアドレス</label>
-                    <input type="email" id="email" name="email" required>
-                    
-                    <label for="email-confirm" class="required">メールアドレス（確認用）</label>
-                    <input type="email" id="email-confirm" name="email-confirm" required>
-                    
-                    <label for="tel" class="required">電話番号</label>
-                    <input type="tel" id="tel" name="tel" required>
-                    
-                    <label for="postal-code" class="required">郵便番号</label>
-                    <div class="search-address-group">
-                        <input type="text" id="postal-code" name="postal-code" placeholder="例: 123-4567" pattern="[0-9]{3}-?[0-9]{4}" required>
-                        <button type="button" class="search-btn">住所検索</button>
+                <h3>お客様情報</h3>
+                
+                <div class="form-section">
+                    <h4 class="form-section-title">基本情報</h4>
+                    <div class="form-group">
+                        <label for="name" class="required">お名前</label>
+                        <input type="text" id="name" required>
                     </div>
                     
-                    <label for="address" class="required">ご住所</label>
-                    <input type="text" id="address" name="address" required>
+                    <div class="form-group">
+                        <label for="email" class="required">メールアドレス</label>
+                        <input type="email" id="email" required>
+                    </div>
                     
-                    <label for="payment-method" class="required">お支払い方法</label>
-                    <select id="payment-method" name="payment-method" required>
-                        <option value="">選択してください</option>
-                        <option value="credit-card">クレジットカード</option>
-                        <option value="bank-transfer">銀行振込</option>
-                        <option value="cash-on-delivery">代金引換</option>
-                    </select>
+                    <div class="form-group">
+                        <label for="email-confirm" class="required">メールアドレス（確認）</label>
+                        <input type="email" id="email-confirm" required>
+                    </div>
                     
-                    <input type="text" id="website" name="website" class="honeypot">
+                    <div class="form-group">
+                        <label for="tel" class="required">電話番号</label>
+                        <input type="tel" id="tel" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4 class="form-section-title">お届け先</h4>
+                    <div class="form-group">
+                        <label for="postal-code" class="required">郵便番号</label>
+                        <div class="postal-code-search">
+                            <input type="text" id="postal-code" placeholder="例: 1000001" required>
+                            <button type="button" class="search-btn" id="search-address-btn">住所検索</button>
+                        </div>
+                    </div>
                     
-                    <button type="button" id="submit-order-btn" class="submit-btn">注文確定</button>
-                </form>
+                    <div class="form-group">
+                        <label for="address" class="required">住所</label>
+                        <textarea id="address" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4 class="form-section-title">お支払い方法</h4>
+                    <div class="form-group">
+                        <label for="payment-method" class="required">お支払方法を選択</label>
+                        <select id="payment-method" required>
+                            <option value="">選択してください</option>
+                            <option value="bank">銀行振込</option>
+                            <option value="online">オンライン決済（クレジットカードなど）</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- ハニーポット -->
+                <div class="honey-pot">
+                    <label for="website">Website</label>
+                    <input type="text" id="website" name="website">
+                </div>
+                
+                <button type="button" class="submit-btn" id="submit-order-btn">注文を確定する</button>
             </div>
         </div>
-        
+
+        <!-- お店についてページ -->
+        <div id="about-page" class="page-content about-content hidden">
+            <h2>お店について</h2>
+            
+            <section>
+                <h3>乃ら蔵堂のこだわり</h3>
+                <p>乃ら蔵堂は、日本の伝統的な文房具の魅力を現代に伝えるお店です。</p>
+                <p>職人が一つひとつ手作りする万年筆と手帳は、使い手の想いを紡ぎ、日々の暮らしに寄り添う存在となります。</p>
+                <p>私たちは、モノづくりの背景にある物語や職人の技術を大切にし、長く愛用できる品々をお届けします。</p>
+            </section>
+            
+            <section>
+                <h3>店主より</h3>
+                <p>「乃ら蔵堂」店主の山田と申します。</p>
+                <p>子どもの頃から文房具が大好きで、特に日本の伝統的な万年筆と手帳の美しさに魅了され、このお店を始めました。</p>
+                <p>お客様に使っていただく喜びを感じながら、一つひとつの商品を丁寧に取り揃えております。</p>
+            </section>
+            
+            <section>
+                <h3>店舗情報</h3>
+                <p>〒100-0001 東京都千代田区千代田1-1-1</p>
+                <p>電話: 03-1234-5678</p>
+                <p>営業時間: 10:00 - 18:00 (月曜定休)</p>
+            </section>
+        </div>
+
+        <!-- プライバシーポリシーページ -->
+        <div id="privacy-page" class="page-content policy-content hidden">
+            <h2>プライバシーポリシー</h2>
+            
+            <section>
+                <h3>個人情報の収集</h3>
+                <p>当サイトでは、お問い合わせや商品のご注文際に、名前（ハンドルネーム）、メールアドレス、お届け先住所等の個人情報をご登録いただく場合がございます。</p>
+            </section>
+            
+            <section>
+                <h3>個人情報の利用目的</h3>
+                <p>お客様からお預かりした個人情報は、以下の目的で利用いたします。</p>
+                <ul>
+                    <li>ご注文された商品の発送</li>
+                    <li>お問い合わせへの回答</li>
+                    <li>メールマガジンの配信（ご希望の場合）</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>個人情報の第三者提供</h3>
+                <p>当サイトでは、お客様の個人情報を適切に管理し、次のいずれかに該当する場合を除き、第三者に開示することはありません。</p>
+                <ul>
+                    <li>お客様の同意がある場合</li>
+                    <li>法令に基づき開示が必要な場合</li>
+                    <li>人の生命、身体及び財産等に対する差し迫った危険があり、緊急の必要がある場合</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>免責事項</h3>
+                <p>当サイトからのリンクやバナーなどで移動したサイトで提供される情報、サービス等について一切の責任を負いません。</p>
+            </section>
+            
+            <section>
+                <h3>プライバシーポリシーの変更</h3>
+                <p>本ポリシーの内容は、法令その他本ポリシーに別段の定めのある事項を除って、変更することがあります。</p>
+            </section>
+            
+            <p>以上</p>
+        </div>
+
+        <!-- 特定商取引法ページ -->
+        <div id="law-page" class="page-content policy-content hidden">
+            <h2>特定商取引法に基づく表記</h2>
+            
+            <table>
+                <tr>
+                    <th>販売業者</th>
+                    <td>乃ら蔵堂</td>
+                </tr>
+                <tr>
+                    <th>代表責任者</th>
+                    <td>山田 太郎</td>
+                </tr>
+                <tr>
+                    <th>所在地</th>
+                    <td>〒100-0001 東京都千代田区千代田1-1-1</td>
+                </tr>
+                <tr>
+                    <th>電話番号</th>
+                    <td>03-1234-5678</td>
+                </tr>
+                <tr>
+                    <th>メールアドレス</th>
+                    <td>info@norakurado.example.com</td>
+                </tr>
+                <tr>
+                    <th>商品代金以外の必要料金</th>
+                    <td>送料、銀行振込手数料</td>
+                </tr>
+                <tr>
+                    <th>引き渡し時期</th>
+                    <td>ご注文後、3〜7営業日以内に発送いたします。</td>
+                </tr>
+                <tr>
+                    <th>お支払い方法</th>
+                    <td>銀行振込、クレジットカード決済</td>
+                </tr>
+                <tr>
+                    <th>返品・交換について</th>
+                    <td>商品到着後7日以内にご連絡ください。初期不良の場合に限り返品・交換を承ります。</td>
+                </tr>
+            </table>
+        </div>
     </main>
 
-    <a href="#order-page" class="order-list-button" id="order-list-button">
-        <span class="material-icons">🛒</span>
-        <span id="order-count">(0)</span>
-    </a>
+    <div class="floating-order-list">
+        <button id="order-list-button">
+            <span>注文リスト</span>
+            <span id="order-count">(0)</span>
+        </button>
+    </div>
 
     <footer>
-        <nav>
+        <nav class="footer-nav">
             <ul>
-                <li><a href="#privacy-page">プライバシーポリシー</a></li>
-                <li><a href="#law-page">特定商取引法に基づく表記</a></li>
+                <li><a data-page="privacy">プライバシーポリシー</a></li>
+                <li><a data-page="law">特定商取引法に基づく表記</a></li>
             </ul>
         </nav>
-        <p>&copy; 2024 乃ら蔵堂</p>
+        <p>&copy; 2023 乃ら蔵堂</p>
     </footer>
 
-    <script src="script.js"></script>
-    
+    <script>
+        // 商品データと注文リストの管理
+        let products = [];
+        let orderList = JSON.parse(localStorage.getItem('orderList')) || [];
+        let currentCategory = 'all';
+        let imageSliders = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // products.jsonから商品データを取得
+            fetch('products.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                products = data.map(item => ({
+                    id: String(item.id), // IDを文字列に統一
+                    name: item.name,
+                    price: item.price,
+                    discountRate: item.discountRate,
+                    images: item.images || [],
+                    category: item.category,
+                    description: item.description || ''
+                }));
+                
+                // カテゴリフィルターを表示
+                setupCategoryFilters();
+                // 商品を表示
+                displayProducts(products);
+            })
+            .catch(error => {
+                console.error('商品データの取得中にエラーが発生しました:', error);
+                const container = document.getElementById('products-container');
+                container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
+            });
+
+            updateOrderListButton();
+            setupEventListeners();
+        });
+
+        // イベントリスナーの一括設定
+        function setupEventListeners() {
+            // ナビゲーション
+            document.querySelector('header nav').addEventListener('click', (event) => {
+                if (event.target.tagName === 'A' && event.target.dataset.page) {
+                    showPage(event.target.dataset.page);
+                }
+            });
+
+            // フッターのナビゲーション
+            document.querySelector('footer nav').addEventListener('click', (event) => {
+                if (event.target.tagName === 'A' && event.target.dataset.page) {
+                    showPage(event.target.dataset.page);
+                }
+            });
+
+            // 注文リストフロートボタン
+            document.getElementById('order-list-button').addEventListener('click', () => showPage('order'));
+
+            // 住所検索ボタン
+            document.getElementById('search-address-btn').addEventListener('click', searchAddress);
+            
+            // 注文確定ボタン
+            document.getElementById('submit-order-btn').addEventListener('click', submitOrder);
+        }
+
+        // カテゴリフィルターのセットアップ
+        function setupCategoryFilters() {
+            const container = document.getElementById('category-filter');
+            const categories = ['all', 'ペン', '手帳', '文具'];
+            
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn';
+                if (category === 'all') {
+                    button.textContent = 'すべて';
+                    button.classList.add('active'); // 最初は「すべて」をアクティブに
+                } else {
+                    button.textContent = category;
+                }
+                button.dataset.category = category;
+                container.appendChild(button);
+            });
+
+            // ボタンのイベント委譲
+            container.addEventListener('click', (event) => {
+                if (event.target.classList.contains('category-btn')) {
+                    const category = event.target.dataset.category;
+                    filterProductsByCategory(category);
+                    
+                    // アクティブなボタンのスタイルを変更
+                    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                    event.target.classList.add('active');
+                }
+            });
+        }
+
+        // カテゴリで商品をフィルタリング
+        function filterProductsByCategory(category) {
+            currentCategory = category;
+            
+            if (category === 'all') {
+                displayProducts(products);
+            } else {
+                const filteredProducts = products.filter(product => product.category === category);
+                displayProducts(filteredProducts);
+            }
+        }
+
+        // ページ表示制御
+        function showPage(pageId) {
+            // スライダーの自動再生を停止
+            stopAllSliders();
+            
+            // すべてのページを非表示
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+                page.classList.remove('active');
+            });
+            
+            // 指定されたページを表示
+            const targetPage = document.getElementById(`${pageId}-page`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                targetPage.classList.add('active');
+            }
+            
+            // 注文リストページの場合は内容を更新
+            if (pageId === 'order') {
+                displayOrderList();
+                calculateTotal();
+            }
+            
+            // ページトップにスクロール
+            window.scrollTo(0, 0);
+        }
+
+        // すべてのスライダーの自動再生を停止
+        function stopAllSliders() {
+            for (const productId in imageSliders) {
+                if (imageSliders[productId].intervalId) {
+                    clearInterval(imageSliders[productId].intervalId);
+                }
+            }
+        }
+
+        // 商品を表示
+        function displayProducts(products) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p class="error-message">該当する商品が見つかりませんでした。</p>';
+                return;
+            }
+            
+            products.forEach(product => {
+                const productElement = createProductElement(product);
+                container.appendChild(productElement);
+                
+                // 画像スライダーの初期化
+                if (product.images && product.images.length > 0) {
+                    initImageSlider(product.id, product.images);
+                }
+            });
+        }
+
+        // 商品カードの作成
+        function createProductElement(product) {
+            const div = document.createElement('div');
+            div.className = 'product-card';
+            div.dataset.productId = product.id; // データ属性を追加
+            
+            const priceHTML = product.discountRate > 0 
+                ? `<p class="product-price"><span class="discount">¥${product.price.toLocaleString()}</span> ¥${calculateDiscountPrice(product).toLocaleString()}</p>`
+                : `<p class="product-price">¥${product.price.toLocaleString()}</p>`;
+            
+            let imageHTML = '';
+            if (product.images && product.images.length > 0) {
+                imageHTML = `
+                    <div class="product-image-slider" id="slider-${product.id}">
+                        ${product.images.map((img, index) => 
+                            `<img src="${img}" alt="${product.name}" class="product-image ${index === 0 ? 'active' : ''}">`
+                        ).join('')}
+                        <div class="slider-controls">
+                            ${product.images.map((_, index) => 
+                                `<div class="slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}" data-product-id="${product.id}"></div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                imageHTML = '<div class="product-image-slider"><div class="product-image active" style="background-color:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999;">画像なし</div></div>';
+            }
+            
+            div.innerHTML = `
+                ${imageHTML}
+                <h3 class="product-title">${product.name}</h3>
+                <p class="product-description">${product.description}</p>
+                ${priceHTML}
+                <div class="quantity-controls">
+                    <button class="quantity-btn decrease" data-product-id="${product.id}">-</button>
+                    <span class="quantity-display" id="quantity-${product.id}">1</span>
+                    <button class="quantity-btn increase" data-product-id="${product.id}">+</button>
+                </div>
+                <button class="add-to-list-btn" data-product-id="${product.id}">リストに加える</button>
+            `;
+
+            // イベントリスナーをここで設定
+            div.querySelector('.decrease').addEventListener('click', () => decreaseQuantity(product.id));
+            div.querySelector('.increase').addEventListener('click', () => increaseQuantity(product.id));
+            div.querySelector('.add-to-list-btn').addEventListener('click', () => addToOrderList(product.id));
+
+            // スライダーのドットイベントリスナー
+            const dots = div.querySelectorAll('.slider-dot');
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const id = this.dataset.productId;
+                    changeSlide(id, index);
+                });
+            });
+
+            return div;
+        }
+
+        // 画像スライダーの初期化
+        function initImageSlider(productId, images) {
+            imageSliders[productId] = {
+                currentIndex: 0,
+                total: images.length,
+                intervalId: null
+            };
+
+            if (images.length > 1) {
+                // 以前のタイマーをクリアしてから新しいタイマーを開始
+                if (imageSliders[productId].intervalId) {
+                    clearInterval(imageSliders[productId].intervalId);
+                }
+                imageSliders[productId].intervalId = setInterval(() => {
+                    const nextIndex = (imageSliders[productId].currentIndex + 1) % images.length;
+                    changeSlide(productId, nextIndex);
+                }, 5000);
+            }
+        }
+
+        // スライドを変更
+        function changeSlide(productId, index) {
+            const slider = document.getElementById(`slider-${productId}`);
+            if (!slider) return;
+
+            const images = slider.querySelectorAll('.product-image');
+            const dots = slider.querySelectorAll('.slider-dot');
+            
+            if (imageSliders[productId].currentIndex < images.length) {
+                images[imageSliders[productId].currentIndex].classList.remove('active');
+                dots[imageSliders[productId].currentIndex].classList.remove('active');
+            }
+            
+            images[index].classList.add('active');
+            dots[index].classList.add('active');
+            
+            imageSliders[productId].currentIndex = index;
+        }
+
+        // 割引価格の計算
+        function calculateDiscountPrice(product) {
+            return Math.floor(product.price * (1 - product.discountRate / 100));
+        }
+
+        // 数量増減
+        function increaseQuantity(productId) {
+            const quantityElement = document.getElementById(`quantity-${productId}`);
+            let quantity = parseInt(quantityElement.textContent);
+            quantityElement.textContent = quantity + 1;
+        }
+
+        function decreaseQuantity(productId) {
+            const quantityElement = document.getElementById(`quantity-${productId}`);
+            let quantity = parseInt(quantityElement.textContent);
+            if (quantity > 1) {
+                quantityElement.textContent = quantity - 1;
+            }
+        }
+
+        // 注文リストへの追加
+        function addToOrderList(productId) {
+            const quantity = parseInt(document.getElementById(`quantity-${productId}`).textContent);
+            const product = products.find(p => p.id === productId);
+            const existingItem = orderList.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                orderList.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.discountRate > 0 ? calculateDiscountPrice(product) : product.price,
+                    quantity: quantity,
+                    image: product.images && product.images.length > 0 ? product.images[0] : ''
+                });
+            }
+            
+            localStorage.setItem('orderList', JSON.stringify(orderList));
+            updateOrderListButton();
+            alert('注文リストに追加しました');
+            
+            const quantityElement = document.getElementById(`quantity-${productId}`);
+            if(quantityElement) {
+                quantityElement.textContent = '1';
+            }
+        }
+
+        // 注文リストボタンの更新
+        function updateOrderListButton() {
+            const button = document.getElementById('order-count');
+            const totalItems = orderList.reduce((total, item) => total + item.quantity, 0);
+            button.textContent = `(${totalItems})`;
+        }
+
+        // 注文リストの表示
+        function displayOrderList() {
+            const container = document.getElementById('order-items');
+            container.innerHTML = '';
+            
+            if (orderList.length === 0) {
+                container.innerHTML = '<p>注文リストに商品がありません</p>';
+                return;
+            }
+            
+            orderList.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'order-item';
+                
+                const imageHTML = item.image 
+                    ? `<img src="${item.image}" alt="${item.name}" width="60" height="60" style="object-fit:cover;">`
+                    : `<div style="width:60px; height:60px; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">画像なし</div>`;
+                
+                itemElement.innerHTML = `
+                    ${imageHTML}
+                    <div class="order-item-info">
+                        <h3>${item.name}</h3>
+                        <p>¥${item.price.toLocaleString()} × ${item.quantity}</p>
+                    </div>
+                    <p>¥${(item.price * item.quantity).toLocaleString()}</p>
+                    <button class="remove-item" data-product-id="${item.id}">×</button>
+                `;
+                container.appendChild(itemElement);
+            });
+
+            // 削除ボタンのイベントリスナー設定
+            container.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    removeFromOrderList(event.target.dataset.productId);
+                });
+            });
+        }
+
+        // 注文リストから商品を削除
+        function removeFromOrderList(productId) {
+            orderList = orderList.filter(item => String(item.id) !== String(productId));
+            localStorage.setItem('orderList', JSON.stringify(orderList));
+            displayOrderList();
+            calculateTotal();
+            updateOrderListButton();
+        }
+
+        // 合計金額の計算
+        function calculateTotal() {
+            const subtotal = orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal < 2000 && subtotal > 0 ? 300 : 0;
+            const total = subtotal + shipping;
+            
+            document.getElementById('subtotal').textContent = `¥${subtotal.toLocaleString()}`;
+            document.getElementById('shipping').textContent = shipping > 0 ? `¥${shipping.toLocaleString()}` : '無料';
+            document.getElementById('total').textContent = `¥${total.toLocaleString()}`;
+        }
+
+        // 郵便番号から住所を検索
+        function searchAddress() {
+            const postalCodeInput = document.getElementById('postal-code');
+            const postalCode = postalCodeInput.value.replace('-', '');
+            
+            if (postalCode.length !== 7) {
+                alert('郵便番号は7桁で入力してください');
+                return;
+            }
+            
+            fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 200 || !data.results) {
+                    alert('該当する住所が見つかりませんでした');
+                    return;
+                }
+                
+                const result = data.results[0];
+                const address = `${result.address1}${result.address2}${result.address3}`;
+                document.getElementById('address').value = address;
+            })
+            .catch(error => {
+                console.error('住所検索中にエラーが発生しました:', error);
+                alert('住所の取得中にエラーが発生しました');
+            });
+        }
+
+        // 注文送信
+        async function submitOrder() {
+            // ハニーポットチェック
+            const honeyPot = document.getElementById('website').value;
+            if (honeyPot) {
+                alert('送信に失敗しました。もう一度お試しください。');
+                return;
+            }
+            
+            // メール確認チェック
+            const email = document.getElementById('email').value;
+            const emailConfirm = document.getElementById('email-confirm').value;
+            
+            if (email !== emailConfirm) {
+                alert('メールアドレスが一致しません。');
+                return;
+            }
+            
+            // 必須フィールドチェック
+            const requiredFields = ['name', 'email', 'tel', 'postal-code', 'address', 'payment-method'];
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value) {
+                    alert('すべての必須項目を入力してください。');
+                    element.focus();
+                    return;
+                }
+            }
+            
+            // 注文データの準備
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                tel: document.getElementById('tel').value,
+                postalCode: document.getElementById('postal-code').value,
+                address: document.getElementById('address').value,
+                paymentMethod: document.getElementById('payment-method').value
+            };
+            
+            const orderData = {
+                orderId: generateOrderId(),
+                items: orderList,
+                customer: formData,
+                subtotal: orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                shipping: orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0) < 2000 ? 300 : 0,
+                total: calculateTotalValue(),
+                timestamp: new Date().toISOString()
+            };
+            
+            await processOrder(orderData);
+        }
+
+        // 合計金額の計算（数値として返す）
+        function calculateTotalValue() {
+            const subtotal = orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal < 2000 && subtotal > 0 ? 300 : 0;
+            return subtotal + shipping;
+        }
+
+        // 注文IDの生成
+        function generateOrderId() {
+            const randomSuffix = Math.random().toString(36).substring(2, 8); // ランダムな6桁の文字列を追加
+            return 'NL' + Date.now() + randomSuffix;
+        }
+
+        // 注文処理
+        async function processOrder(orderData) {
+            const submitBtn = document.getElementById('submit-order-btn');
+            const originalText = submitBtn.textContent;
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '送信中... <span class="loading"></span>';
+                
+                await fetch('https://script.google.com/macros/s/AKfycbwNqitBfTAdyao6uRbQ1i-nEdWQBFro1WQ_-TZKmbCc4V3OHKuPnDsIZ5cROgG_bMObRg/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                orderList = [];
+                localStorage.removeItem('orderList');
+                updateOrderListButton();
+                
+                alert(`注文が完了しました。\n注文ID: ${orderData.orderId}\n合計金額: ¥${orderData.total.toLocaleString()}\n確認メールを送信しました。`);
+                
+                document.querySelectorAll('.order-form input, .order-form select, .order-form textarea').forEach(input => {
+                    input.value = '';
+                });
+                
+                showPage('home');
+                
+            } catch (error) {
+                console.error('注文処理中にエラーが発生しました:', error);
+                alert('注文の送信中にエラーが発生しました。もう一度お試しください。');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        }
+    </script>
 </body>
 </html>
