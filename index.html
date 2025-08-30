@@ -704,7 +704,7 @@
                     <td>送料、銀行振込手数料</td>
                 </tr>
                 <tr>
-                    <th>引き渡し時期</h3>
+                    <th>引き渡し時期</th>
                     <td>ご注文後、3〜7営業日以内に発送いたします。</td>
                 </tr>
                 <tr>
@@ -741,39 +741,75 @@
         let products = [];
         let orderList = JSON.parse(localStorage.getItem('orderList')) || [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-        // products.jsonから商品データを取得
-         fetch('products.json')
-        .then(response => {
-            // HTTPステータスコードをチェックし、問題があればエラーを投げる
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        // 商品データ（サンプル）
+        const sampleProducts = [
+            {
+                id: '1',
+                name: '和紙手帳「月明」',
+                price: 3800,
+                discountRate: 10,
+                description: '日本の伝統的な和紙を使用した上質な手帳。書き心地が滑らかで、インクのにじみを防ぎます。月ごとの計画を立てやすいレイアウトが特徴です。',
+                imageURL: 'https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                category: '手帳'
+            },
+            {
+                id: '2',
+                name: '万年筆「匠」',
+                price: 12000,
+                discountRate: 15,
+                description: '職人が一本一本手作りで仕上げた高級万年筆。バランスの取れた重量感と滑らかな書き味が特徴で、長く愛用できる逸品です。',
+                imageURL: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                category: '万年筆'
+            },
+            {
+                id: '3',
+                name: '墨液セット',
+                price: 2500,
+                discountRate: 0,
+                description: '伝統的な製法で作られた高品質な墨液と、書き味の良い筆ペンのセット。すっきりとした黒色と滲まない特性が特徴です。',
+                imageURL: 'https://images.unsplash.com/photo-1600074559472-ef4e7af4c5fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                category: '筆記具'
+            },
+            {
+                id: '4',
+                name: '漆塗りペンケース',
+                price: 5800,
+                discountRate: 5,
+                description: '伝統的な漆塗り技術で仕上げた高級感あふれるペンケース。収納力がありながらもスリムなデザインで、持ち運びにも便利です。',
+                imageURL: 'https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                category: 'アクセサリー'
             }
-            // レスポンスボディをJSONとして解析
-            return response.json();
-        })
-        .then(data => {
-            // 取得したデータを `products` 配列に代入
-            products = data.map(item => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                discountRate: item.discountRate,
-                description: item.description || '',
-                imageURL: item.imageURL,
-                category: item.category
-            }));
-            // 商品を表示
-            displayProducts(products);
-        })
-        .catch(error => {
-            // エラーが発生した場合の処理
-            console.error('商品データの取得中にエラーが発生しました:', error);
-            const container = document.getElementById('products-container');
-            container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
-        });
+        ];
 
-             updateOrderListButton();
+        document.addEventListener('DOMContentLoaded', function() {
+            // 商品データの取得を試みる（実際の運用時にはproducts.jsonを使用）
+            fetch('products.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    products = data.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        discountRate: item.discountRate,
+                        description: item.description || '',
+                        imageURL: item.imageURL,
+                        category: item.category
+                    }));
+                    displayProducts(products);
+                })
+                .catch(error => {
+                    console.error('商品データの取得中にエラーが発生しました:', error);
+                    // エラー時はサンプル商品を表示
+                    products = sampleProducts;
+                    displayProducts(products);
+                });
+
+            updateOrderListButton();
         });
 
         // ページ表示制御
@@ -828,15 +864,10 @@
                 ? `<img src="${product.imageURL}" alt="${product.name}" class="product-image">`
                 : `<div class="product-image">画像なし</div>`;
             
-            // 説明文がある場合のみ表示
-            const descriptionHTML = product.description 
-                ? `<p class="product-description">${product.description}</p>`
-                : '';
-            
             div.innerHTML = `
                 ${imageHTML}
                 <h3 class="product-title">${product.name}</h3>
-                ${descriptionHTML}
+                <p class="product-description">${product.description}</p>
                 ${priceHTML}
                 <div class="quantity-controls">
                     <button class="quantity-btn" onclick="decreaseQuantity('${product.id}')">-</button>
@@ -849,6 +880,7 @@
             return div;
         }
 
+        // 残りの関数は変更なし（割引価格の計算、数量増減、注文リストへの追加など）
         // 割引価格の計算
         function calculateDiscountPrice(product) {
             return Math.floor(product.price * (1 - product.discountRate / 100));
@@ -903,7 +935,7 @@
             button.textContent = `(${totalItems})`;
         }
 
-        // 注文リストの表示
+        // 注文リストの显示
         function displayOrderList() {
             const container = document.getElementById('order-items');
             container.innerHTML = '';
