@@ -1,1 +1,54 @@
-[{"id":1,"name":"ボールペン","price":350,"discountRate":0,"imageURL":"","category":"ペン"},{"id":2,"name":"メタルボールペン","price":500,"discountRate":0,"imageURL":"","category":"ペン"},{"id":3,"name":"レザー手帳カバー","price":1500,"discountRate":0,"imageURL":"","category":"手帳"}]
+[
+  {
+    "id": 1,
+    "name": "ボールペン",
+    "price": 350,
+    "description": "ボールペンは、軽くて持ち運びやすいので、普段使いに最適です。プラスチック製のため、壊れにくく、気軽に使えます。シンプルながらも安定した書き心地で、オフィスや学校など、さまざまな場面で活躍します。",
+    "discountRate": 0,
+    "images": [
+      "images/pen1-1.jpg",
+      "images/pen1-2.jpg",
+      "images/pen1-3.jpg"
+    ],
+    "category": "ペン"
+  },
+  {
+    "id": 2,
+    "name": "メタルボールペン",
+    "price": 500,
+    "description": "重厚感のある金属製のボディが特徴的なこのボールペンは、手になじみやすく、長時間の筆記でも疲れにくい設計です。滑らかなインクフローと適度な重みが、文字を書くという行為をより快適なものにします。自分へのご褒美や、大切な方へのギフトにもおすすめです。",
+    "discountRate": 0,
+    "images": [
+      "images/pen2-1.jpg",
+      "images/pen2-2.jpg",
+      "images/pen2-3.jpg"
+    ],
+    "category": "ペン"
+  },
+  {
+    "id": 3,
+    "name": "レザー手帳カバー",
+    "price": 1500,
+    "description": "高級レザーを使用した手帳カバーは、使い込むほどに味わい深い風合いが楽しめます。職人が一つひとつ丁寧に仕上げており、耐久性と美しさを兼ね備えています。ビジネスシーンからプライベートまで、あらゆる場面でご利用いただけます。",
+    "discountRate": 0,
+    "images": [
+      "images/notebook1-1.jpg",
+      "images/notebook1-2.jpg",
+      "images/notebook1-3.jpg"
+    ],
+    "category": "手帳"
+  },
+  {
+    "id": 4,
+    "name": "手帳カバー",
+    "price": 1000,
+    "description": "シンプルで使いやすい手帳カバーです。軽量ながらもしっかりとした作りで、日常的な使用に最適です。カードポケットも付いており、利便性が高まっています。",
+    "discountRate": 20,
+    "images": [
+      "images/notebook2-1.jpg",
+      "images/notebook2-2.jpg",
+      "images/notebook2-3.jpg"
+    ],
+    "category": "手帳"
+  }
+]

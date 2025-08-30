@@ -9,7 +9,7 @@
         :root {
             --main-blue: #0f2350;
             --accent-gold: #b8a16b;
-            --light-gray: #f5f5f5;
+            --light-gray: #f5f5f0;
             --dark-gray: #333;
         }
 
@@ -75,9 +75,30 @@
             min-height: calc(100vh - 200px);
         }
 
+        .category-filter {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .category-btn {
+            background-color: var(--light-gray);
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--main-blue);
+            color: white;
+        }
+
         .products-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -88,6 +109,7 @@
             padding: 1rem;
             transition: transform 0.3s, box-shadow 0.3s;
             background: white;
+            position: relative;
         }
 
         .product-card:hover {
@@ -95,24 +117,60 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .product-image {
+        .product-image-slider {
+            position: relative;
             width: 100%;
             height: 200px;
-            object-fit: cover;
             margin-bottom: 1rem;
+            overflow: hidden;
             border-radius: 3px;
-            background-color: #f0f0f0;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .product-image.active {
+            display: block;
+        }
+
+        .slider-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: #999;
-            font-size: 0.9rem;
+            gap: 5px;
+        }
+
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .slider-dot.active {
+            background-color: white;
         }
 
         .product-title {
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
             color: var(--main-blue);
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: #666;
+            line-height: 1.5;
         }
 
         .product-price {
@@ -326,6 +384,26 @@
             background-color: #a38d5c;
         }
 
+        /* 郵便番号検索ボタン */
+        .postal-code-search {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .postal-code-search input {
+            flex: 1;
+        }
+
+        .search-btn {
+            background-color: var(--main-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
         /* レスポンシブデザイン */
         @media (max-width: 768px) {
             header {
@@ -355,6 +433,11 @@
             .footer-nav ul {
                 flex-direction: column;
                 align-items: center;
+            }
+
+            /* 政策ページの上部余白を追加 */
+            .policy-content, .about-content {
+                padding-top: 1rem;
             }
         }
 
@@ -453,6 +536,9 @@
         <!-- ホームページ -->
         <div id="home-page" class="page-content active">
             <h2>商品一覧</h2>
+            <div class="category-filter" id="category-filter">
+                <!-- カテゴリボタンはJavaScriptで動的に生成 -->
+            </div>
             <div class="products-container" id="products-container">
                 <!-- 商品はJavaScriptで動的に生成 -->
             </div>
@@ -502,7 +588,10 @@
                     <h4 class="form-section-title">お届け先</h4>
                     <div class="form-group">
                         <label for="postal-code" class="required">郵便番号</label>
-                        <input type="text" id="postal-code" required>
+                        <div class="postal-code-search">
+                            <input type="text" id="postal-code" placeholder="例: 1000001" required>
+                            <button type="button" class="search-btn" onclick="searchAddress()">住所検索</button>
+                        </div>
                     </div>
                     
                     <div class="form-group">
@@ -667,13 +756,76 @@
         // 商品データと注文リストの管理
         let products = [];
         let orderList = JSON.parse(localStorage.getItem('orderList')) || [];
+        let currentCategory = 'all';
+        let imageSliders = {};
 
-        // JSONデータを直接埋め込み（CORS制限回避）
-        const jsonData = [
-            {"商品ID":"a1","商品名":"ボールペン","価格":350,"割引率":0,"画像URL":"","カテゴリ":"ペン"},
-            {"商品ID":"a2","商品名":"メタルボールペン","価格":500,"割引率":0,"画像URL":"","カテゴリ":""},
-            {"商品ID":"b1","商品名":"レザー手帳カバー","価格":1500,"割引率":0,"画像URL":"","カテゴリ":"手帳"}
-        ];
+        document.addEventListener('DOMContentLoaded', function() {
+            // products.jsonから商品データを取得
+            fetch('products.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                products = data.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    discountRate: item.discountRate,
+                    images: item.images || [],
+                    category: item.category,
+                    description: item.description || ''
+                }));
+                
+                // カテゴリフィルターを表示
+                displayCategoryFilters();
+                // 商品を表示
+                displayProducts(products);
+            })
+            .catch(error => {
+                console.error('商品データの取得中にエラーが発生しました:', error);
+                const container = document.getElementById('products-container');
+                container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
+            });
+
+            updateOrderListButton();
+        });
+
+        // カテゴリフィルターの表示
+        function displayCategoryFilters() {
+            const container = document.getElementById('category-filter');
+            const categories = ['all', 'ペン', '手帳', '文具'];
+            
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn';
+                button.textContent = category === 'all' ? 'すべて' : category;
+                button.addEventListener('click', () => filterProductsByCategory(category));
+                container.appendChild(button);
+            });
+        }
+
+        // カテゴリで商品をフィルタリング
+        function filterProductsByCategory(category) {
+            currentCategory = category;
+            
+            // アクティブなボタンのスタイルを変更
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                displayProducts(products);
+            } else {
+                const filteredProducts = products.filter(product => product.category === category);
+                displayProducts(filteredProducts);
+            }
+        }
 
         // ページ表示制御
         function showPage(pageId) {
@@ -697,50 +849,24 @@
             window.scrollTo(0, 0);
         }
 
-        // ページ読み込み時に商品データを設定
-        document.addEventListener('DOMContentLoaded', function() {
-    fetch('products.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        // 取得したデータを `products` 配列に代入し、IDを文字列に変換
-        products = data.map(item => ({
-            id: String(item.id), // ★ ここを修正
-            name: item.name,
-            price: item.price,
-            discountRate: item.discountRate,
-            description: item.description || '',
-            imageURL: item.imageURL,
-            category: item.category
-        }));
-        displayProducts(products);
-    })
-    .catch(error => {
-        console.error('商品データの取得中にエラーが発生しました:', error);
-        const container = document.getElementById('products-container');
-        container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
-    });
-
-    updateOrderListButton();
-});
-
         // 商品を表示
         function displayProducts(products) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
             
             if (products.length === 0) {
-                container.innerHTML = '<p class="error-message">商品データが見つかりませんでした。</p>';
+                container.innerHTML = '<p class="error-message">該当する商品が見つかりませんでした。</p>';
                 return;
             }
             
             products.forEach(product => {
                 const productElement = createProductElement(product);
                 container.appendChild(productElement);
+                
+                // 画像スライダーの初期化
+                if (product.images && product.images.length > 0) {
+                    initImageSlider(product.id, product.images);
+                }
             });
         }
 
@@ -753,14 +879,29 @@
                 ? `<p class="product-price"><span class="discount">¥${product.price.toLocaleString()}</span> ¥${calculateDiscountPrice(product).toLocaleString()}</p>`
                 : `<p class="product-price">¥${product.price.toLocaleString()}</p>`;
             
-            // 画像がない場合のプレースホルダー
-            const imageHTML = product.imageURL 
-                ? `<img src="${product.imageURL}" alt="${product.name}" class="product-image">`
-                : `<div class="product-image">画像なし</div>`;
+            // 商品画像スライダー
+            let imageHTML = '';
+            if (product.images && product.images.length > 0) {
+                imageHTML = `
+                    <div class="product-image-slider" id="slider-${product.id}">
+                        ${product.images.map((img, index) => 
+                            `<img src="${img}" alt="${product.name}" class="product-image ${index === 0 ? 'active' : ''}">`
+                        ).join('')}
+                        <div class="slider-controls">
+                            ${product.images.map((_, index) => 
+                                `<div class="slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                imageHTML = '<div class="product-image-slider"><div class="product-image active" style="background-color:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999;">画像なし</div></div>';
+            }
             
             div.innerHTML = `
                 ${imageHTML}
                 <h3 class="product-title">${product.name}</h3>
+                <p class="product-description">${product.description}</p>
                 ${priceHTML}
                 <div class="quantity-controls">
                     <button class="quantity-btn" onclick="decreaseQuantity('${product.id}')">-</button>
@@ -771,6 +912,53 @@
             `;
             
             return div;
+        }
+
+        // 画像スライダーの初期化
+        function initImageSlider(productId, images) {
+            const slider = document.getElementById(`slider-${productId}`);
+            const dots = slider.querySelectorAll('.slider-dot');
+            const imageElements = slider.querySelectorAll('.product-image');
+            
+            // スライダーの状態を保存
+            imageSliders[productId] = {
+                currentIndex: 0,
+                total: images.length
+            };
+            
+            // ドットクリックイベントの設定
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    changeSlide(productId, index);
+                });
+            });
+            
+            // 自動スライド（オプション）
+            if (images.length > 1) {
+                setInterval(() => {
+                    const nextIndex = (imageSliders[productId].currentIndex + 1) % images.length;
+                    changeSlide(productId, nextIndex);
+                }, 5000);
+            }
+        }
+
+        // スライドを変更
+        function changeSlide(productId, index) {
+            const slider = document.getElementById(`slider-${productId}`);
+            const images = slider.querySelectorAll('.product-image');
+            const dots = slider.querySelectorAll('.slider-dot');
+            
+            // 現在のスライドを非表示
+            images[imageSliders[productId].currentIndex].classList.remove('active');
+            dots[imageSliders[productId].currentIndex].classList.remove('active');
+            
+            // 新しいスライドを表示
+            images[index].classList.add('active');
+            dots[index].classList.add('active');
+            
+            // 現在のインデックスを更新
+            imageSliders[productId].currentIndex = index;
         }
 
         // 割引価格の計算
@@ -807,7 +995,7 @@
                     name: product.name,
                     price: product.discountRate > 0 ? calculateDiscountPrice(product) : product.price,
                     quantity: quantity,
-                    image: product.imageURL
+                    image: product.images && product.images.length > 0 ? product.images[0] : ''
                 });
             }
             
@@ -843,7 +1031,7 @@
                 
                 // 画像がない場合の処理
                 const imageHTML = item.image 
-                    ? `<img src="${item.image}" alt="${item.name}" width="60">`
+                    ? `<img src="${item.image}" alt="${item.name}" width="60" height="60" style="object-fit:cover;">`
                     : `<div style="width:60px; height:60px; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">画像なし</div>`;
                 
                 itemElement.innerHTML = `
@@ -861,12 +1049,11 @@
 
         // 注文リストから商品を削除
         function removeFromOrderList(productId) {
-    // product.idが数値であるため、渡された文字列のIDを数値に変換して比較
-    orderList = orderList.filter(item => String(item.id) !== productId); // ★ ここを修正
-    localStorage.setItem('orderList', JSON.stringify(orderList));
-    displayOrderList();
-    calculateTotal();
-    updateOrderListButton();
+            orderList = orderList.filter(item => item.id !== productId);
+            localStorage.setItem('orderList', JSON.stringify(orderList));
+            displayOrderList();
+            calculateTotal();
+            updateOrderListButton();
         }
 
         // 合計金額の計算
@@ -878,6 +1065,33 @@
             document.getElementById('subtotal').textContent = `¥${subtotal.toLocaleString()}`;
             document.getElementById('shipping').textContent = shipping > 0 ? `¥${shipping.toLocaleString()}` : '無料';
             document.getElementById('total').textContent = `¥${total.toLocaleString()}`;
+        }
+
+        // 郵便番号から住所を検索
+        function searchAddress() {
+            const postalCode = document.getElementById('postal-code').value.replace('-', '');
+            
+            if (postalCode.length !== 7) {
+                alert('郵便番号は7桁で入力してください');
+                return;
+            }
+            
+            fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 200 || !data.results) {
+                    alert('該当する住所が見つかりませんでした');
+                    return;
+                }
+                
+                const result = data.results[0];
+                const address = `${result.address1}${result.address2}${result.address3}`;
+                document.getElementById('address').value = address;
+            })
+            .catch(error => {
+                console.error('住所検索中にエラーが発生しました:', error);
+                alert('住所の取得中にエラーが発生しました');
+            });
         }
 
         // 注文送信
@@ -956,7 +1170,7 @@
                 submitBtn.innerHTML = '送信中... <span class="loading"></span>';
                 
                 // GAS Web Appにデータを送信
-                const response = await fetch('https://script.google.com/macros/s/AKfycbx6UvzdSdvnv038K4ZF0K5lYjz_1SsQmwTUcpAbrtJAB0EmKAkxxfUH7eIbm9r9OR4aCA/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwNqitBfTAdyao6uRbQ1i-nEdWQBFro1WQ_-TZKmbCc4V3OHKuPnDsIZ5cROgG_bMObRg/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
