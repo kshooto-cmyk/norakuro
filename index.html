@@ -1,6 +1,781 @@
-<!-- 以下はindex.htmlファイルの修正部分です -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ペンと手帖の、乃ら蔵堂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-blue: #0f2350;
+            --accent-gold: #b8a16b;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+        }
 
-<script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', 'Sawarabi Mincho', serif;
+            color: var(--dark-gray);
+            background-color: #fff;
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        header {
+            background-color: var(--main-blue);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            background: linear-gradient(rgba(15, 35, 80, 0.8), rgba(15, 35, 80, 0.6)), url('https://images.unsplash.com/photo-1531973577160-4c4858e7d1b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background-color: var(--accent-gold);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #a38d5c;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .page-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border-radius: 3px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--main-blue);
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            color: var(--main-blue);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .discount {
+            color: #e74c3c;
+            text-decoration: line-through;
+            margin-right: 0.5rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .quantity-btn {
+            background-color: var(--main-blue);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            border-radius: 3px;
+        }
+
+        .quantity-display {
+            margin: 0 0.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .add-to-list-btn {
+            background-color: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            border-radius: 3px;
+            font-family: inherit;
+        }
+
+        .add-to-list-btn:hover {
+            background-color: #a38d5c;
+        }
+
+        .floating-order-list {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        #order-list-button {
+            background-color: var(--main-blue);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-family: inherit;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        footer {
+            background-color: var(--main-blue);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .footer-nav {
+            margin-bottom: 1rem;
+        }
+
+        .footer-nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* 注文リストページのスタイル */
+        .order-list-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+
+        .order-item-info {
+            flex-grow: 1;
+        }
+
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .order-summary {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        /* フォームスタイル */
+        .order-form {
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--main-blue);
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section-title {
+            color: var(--main-blue);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        .honey-pot {
+            display: none;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-family: inherit;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #a38d5c;
+        }
+
+        /* 郵便番号検索ボタン */
+        .postal-code-search {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .postal-code-search input {
+            flex: 1;
+        }
+
+        .search-btn {
+            background-color: var(--main-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            background-color: #0a1a3a;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 0.5rem;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .products-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-content {
+                padding: 1rem;
+            }
+
+            .footer-nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .postal-code-search {
+                flex-direction: column;
+            }
+        }
+
+        /* 政策ページ用スタイル */
+        .policy-content, .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+        }
+        
+        .policy-content section, .about-content section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .policy-content h3, .about-content h3 {
+            color: var(--main-blue);
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--accent-gold);
+            font-size: 1.1rem;
+        }
+        
+        .policy-content ul, .about-content ul {
+            padding-left: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .policy-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .policy-content th, .policy-content td {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .policy-content th {
+            background-color: var(--light-gray);
+            color: var(--main-blue);
+            width: 30%;
+        }
+        
+        .about-content {
+            line-height: 1.8;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+
+        /* ローディングインジケーター */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            padding: 2rem;
+            font-weight: bold;
+        }
+        
+        /* 初期表示用 */
+        #loading-message {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ペンと手帖の、乃ら蔵堂</h1>
+        <nav>
+            <ul>
+                <li><a onclick="showPage('home')">ホーム</a></li>
+                <li><a onclick="showPage('about')">お店について</a></li>
+                <li><a onclick="showPage('order')">注文リスト</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ホームページ -->
+        <div id="home-page" class="page-content active">
+            <!-- ヒーローセクション追加 -->
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>伝統の文房具と、創作の喜びを</h2>
+                    <p>乃ら蔵堂は、日本の伝統的な文房具の魅力を現代に伝えるお店です。職人が心を込めて作り上げた万年筆と手帳で、あなたの創作活動を豊かにします。</p>
+                    <a href="#products" class="cta-button">商品を見る</a>
+                </div>
+            </div>
+            
+            <h2 id="products">商品一覧</h2>
+            <div id="loading-message">商品を読み込み中...</div>
+            <div class="products-container" id="products-container">
+                <!-- 商品はJavaScriptで動的に生成 -->
+            </div>
+        </div>
+
+        <!-- 注文リストページ -->
+        <div id="order-page" class="page-content hidden">
+            <h2>注文リスト</h2>
+            <div id="order-items" class="order-list-container">
+                <!-- 注文商品はJavaScriptで動的に生成 -->
+            </div>
+            
+            <div class="order-summary">
+                <h3>注文概要</h3>
+                <p>小計: <span id="subtotal">¥0</span></p>
+                <p>送料: <span id="shipping">¥0</span></p>
+                <p>合計: <span id="total">¥0</span></p>
+            </div>
+            
+            <div class="order-form">
+                <h3>お客様情報</h3>
+                
+                <div class="form-section">
+                    <h4 class="form-section-title">基本情報</h4>
+                    <div class="form-group">
+                        <label for="name" class="required">お名前</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">メールアドレス</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email-confirm" class="required">メールアドレス（確認）</label>
+                        <input type="email" id="email-confirm" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tel" class="required">電話番号</label>
+                        <input type="tel" id="tel" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4 class="form-section-title">お届け先</h4>
+                    <div class="form-group">
+                        <label for="postal-code" class="required">郵便番号</label>
+                        <div class="postal-code-search">
+                            <input type="text" id="postal-code" placeholder="123-4567" required>
+                            <button type="button" class="search-btn" id="postal-search-btn">住所検索</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address" class="required">住所</label>
+                        <textarea id="address" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4 class="form-section-title">お支払い方法</h4>
+                    <div class="form-group">
+                        <label for="payment-method" class="required">お支払方法を選択</label>
+                        <select id="payment-method" required>
+                            <option value="">選択してください</option>
+                            <option value="bank">銀行振込</option>
+                            <option value="online">オンライン決済（クレジットカードなど）</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- ハニーポット -->
+                <div class="honey-pot">
+                    <label for="website">Website</label>
+                    <input type="text" id="website" name="website">
+                </div>
+                
+                <button type="button" class="submit-btn" onclick="submitOrder()" id="submit-order-btn">注文を確定する</button>
+            </div>
+        </div>
+
+        <!-- お店についてページ -->
+        <div id="about-page" class="page-content about-content hidden">
+            <h2>お店について</h2>
+            
+            <section>
+                <h3>乃ら蔵堂のこだわり</h3>
+                <p>乃ら蔵堂は、日本の伝統的な文房具の魅力を現代に伝えるお店です。</p>
+                <p>職人が一つひとつ手作りする万年筆と手帳は、使い手の想いを紡ぎ、日々の暮らしに寄り添う存在となります。</p>
+                <p>私たちは、モノづくりの背景にある物語や職人の技術を大切にし、長く愛用できる品々をお届けします。</p>
+            </section>
+            
+            <section>
+                <h3>店主より</h3>
+                <p>「乃ら蔵堂」店主の山田と申します。</p>
+                <p>子どもの頃から文房具が大好きで、特に日本の伝統的な万年筆と手帳の美しさに魅了され、このお店を始めました。</p>
+                <p>お客様に使っていただく喜びを感じながら、一つひとつの商品を丁寧に取り揃えております。</p>
+            </section>
+            
+            <section>
+                <h3>店舗情報</h3>
+                <p>〒100-0001 東京都千代田区千代田1-1-1</p>
+                <p>電話: 03-1234-5678</p>
+                <p>営業時間: 10:00 - 18:00 (月曜定休)</p>
+            </section>
+        </div>
+
+        <!-- プライバシーポリシーページ -->
+        <div id="privacy-page" class="page-content policy-content hidden">
+            <h2>プライバシーポリシー</h2>
+            
+            <section>
+                <h3>個人情報の収集</h3>
+                <p>当サイトでは、お問い合わせや商品のご注文際に、名前（ハンドルネーム）、メールアドレス、お届け先住所等の個人情報をご登録いただく場合がございます。</p>
+            </section>
+            
+            <section>
+                <h3>個人情報の利用目的</h3>
+                <p>お客様からお預かりした個人情報は、以下の目的で利用いたします。</p>
+                <ul>
+                    <li>ご注文された商品の発送</li>
+                    <li>お問い合わせへの回答</li>
+                    <li>メールマガジンの配信（ご希望の場合）</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>個人情報の第三者提供</h3>
+                <p>当サイトでは、お客様の個人情報を適切に管理し、次のいずれかに該当する場合を除き、第三者に開示することはありません。</p>
+                <ul>
+                    <li>お客様の同意がある場合</li>
+                    <li>法令に基づき開示が必要な場合</li>
+                    <li>人の生命、身体及び財産等に対する差し迫った危険があり、緊急の必要がある場合</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h3>免責事項</h3>
+                <p>当サイトからのリンクやバナーなどで移動したサイトで提供される情報、サービス等について一切の責任を負いません。</p>
+            </section>
+            
+            <section>
+                <h3>プライバシーポリシーの変更</h3>
+                <p>本ポリシーの内容は、法令その他本ポリシーに別段の定めのある事項を除って，変更することがあります。</p>
+            </section>
+            
+            <p>以上</p>
+        </div>
+
+        <!-- 特定商取引法ページ -->
+        <div id="law-page" class="page-content policy-content hidden">
+            <h2>特定商取引法に基づく表記</h2>
+            
+            <table>
+                <tr>
+                    <th>販売業者</th>
+                    <td>乃ら蔵堂</td>
+                </tr>
+                <tr>
+                    <th>代表責任者</th>
+                    <td>山田 太郎</td>
+                </tr>
+                <tr>
+                    <th>所在地</th>
+                    <td>〒100-0001 東京都千代田区千代田1-1-1</td>
+                </tr>
+                <tr>
+                    <th>電話番号</th>
+                    <td>03-1234-5678</td>
+                </tr>
+                <tr>
+                    <th>メールアドレス</th>
+                    <td>info@norakurado.example.com</td>
+                </tr>
+                <tr>
+                    <th>商品代金以外の必要料金</th>
+                    <td>送料、銀行振込手数料</td>
+                </tr>
+                <tr>
+                    <th>引き渡し時期</th>
+                    <td>ご注文後、3〜7営業日以内に発送いたします。</td>
+                </tr>
+                <tr>
+                    <th>お支払い方法</th>
+                    <td>銀行振込、クレジットカード決済</td>
+                </tr>
+                <tr>
+                    <th>返品・交換について</th>
+                    <td>商品到着後7日以内にご連絡ください。初期不良の場合に限り返品・交換を承ります。</td>
+                </tr>
+            </table>
+        </div>
+    </main>
+
+    <div class="floating-order-list">
+        <button id="order-list-button" onclick="showPage('order')">
+            <span>注文リスト</span>
+            <span id="order-count">(0)</span>
+        </button>
+    </div>
+
+    <footer>
+        <nav class="footer-nav">
+            <ul>
+                <li><a onclick="showPage('privacy')">プライバシーポリシー</a></li>
+                <li><a onclick="showPage('law')">特定商取引法に基づく表記</a></li>
+            </ul>
+        </nav>
+        <p>&copy; 2023 乃ら蔵堂</p>
+    </footer>
+
+    <script>
 // 商品データと注文リストの管理
 let products = [];
 let orderList = JSON.parse(localStorage.getItem('orderList')) || [];
@@ -151,5 +926,194 @@ function addToOrderList(productId) {
     }
 }
 
-// 残りの関数は変更なし
-</script>
+        // 注文リストボタンの更新
+        function updateOrderListButton() {
+            const button = document.getElementById('order-count');
+            if (button) {
+                const totalItems = orderList.reduce((total, item) => total + item.quantity, 0);
+                button.textContent = `(${totalItems})`;
+            }
+        }
+
+        // 注文リストの表示
+        function displayOrderList() {
+            const container = document.getElementById('order-items');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (orderList.length === 0) {
+                container.innerHTML = '<p>注文リストに商品がありません</p>';
+                return;
+            }
+            
+            orderList.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'order-item';
+                
+                // 画像がない場合の処理
+                const imageHTML = item.image 
+                    ? `<img src="${item.image}" alt="${item.name}" width="60">`
+                    : `<div style="width:60px; height:60px; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">画像なし</div>`;
+                
+                itemElement.innerHTML = `
+                    ${imageHTML}
+                    <div class="order-item-info">
+                        <h3>${item.name}</h3>
+                        <p>¥${item.price.toLocaleString()} × ${item.quantity}</p>
+                    </div>
+                    <p>¥${(item.price * item.quantity).toLocaleString()}</p>
+                    <button class="remove-item" onclick="removeFromOrderList('${item.id}')">×</button>
+                `;
+                container.appendChild(itemElement);
+            });
+        }
+
+        // 注文リストから商品を削除
+        function removeFromOrderList(productId) {
+            orderList = orderList.filter(item => item.id !== productId);
+            try {
+                localStorage.setItem('orderList', JSON.stringify(orderList));
+                displayOrderList();
+                calculateTotal();
+                updateOrderListButton();
+            } catch (e) {
+                console.error('ローカルストレージの保存に失敗しました:', e);
+                alert('商品の削除に失敗しました。');
+            }
+        }
+
+        // 合計金額の計算
+        function calculateTotal() {
+            const subtotalElement = document.getElementById('subtotal');
+            const shippingElement = document.getElementById('shipping');
+            const totalElement = document.getElementById('total');
+            
+            if (!subtotalElement || !shippingElement || !totalElement) return;
+            
+            const subtotal = orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal < 2000 && subtotal > 0 ? 300 : 0;
+            const total = subtotal + shipping;
+            
+            subtotalElement.textContent = `¥${subtotal.toLocaleString()}`;
+            shippingElement.textContent = shipping > 0 ? `¥${shipping.toLocaleString()}` : '無料';
+            totalElement.textContent = `¥${total.toLocaleString()}`;
+        }
+
+        // 合計金額の計算（数値として返す）
+        function calculateTotalValue() {
+            const subtotal = orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal < 2000 && subtotal > 0 ? 300 : 0;
+            return subtotal + shipping;
+        }
+
+        // 注文IDの生成
+        function generateOrderId() {
+            return 'NL' + Date.now() + Math.floor(Math.random() * 1000);
+        }
+
+        // 注文送信
+        async function submitOrder() {
+            // ハニーポットチェック
+            const honeyPot = document.getElementById('website');
+            if (honeyPot && honeyPot.value) {
+                alert('送信に失敗しました。もう一度お試しください。');
+                return;
+            }
+            
+            // メール確認チェック
+            const email = document.getElementById('email').value;
+            const emailConfirm = document.getElementById('email-confirm').value;
+            
+            if (email !== emailConfirm) {
+                alert('メールアドレスが一致しません。');
+                return;
+            }
+            
+            // 必須フィールドチェック
+            const requiredFields = ['name', 'email', 'tel', 'postal-code', 'address', 'payment-method'];
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element || !element.value) {
+                    alert('すべての必須項目を入力してください。');
+                    if (element) element.focus();
+                    return;
+                }
+            }
+            
+            // 注文データの準備
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                tel: document.getElementById('tel').value,
+                postalCode: document.getElementById('postal-code').value,
+                address: document.getElementById('address').value,
+                paymentMethod: document.getElementById('payment-method').value
+            };
+            
+            const orderData = {
+                orderId: generateOrderId(),
+                items: orderList,
+                customer: formData,
+                subtotal: orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                shipping: orderList.reduce((sum, item) => sum + (item.price * item.quantity), 0) < 2000 ? 300 : 0,
+                total: calculateTotalValue(),
+                timestamp: new Date().toISOString()
+            };
+            
+            // 注文処理（GASに送信）
+            await processOrder(orderData);
+        }
+
+        // 注文処理
+        async function processOrder(orderData) {
+            const submitBtn = document.getElementById('submit-order-btn');
+            if (!submitBtn) return;
+            
+            const originalText = submitBtn.textContent;
+            
+            try {
+                // ローディング表示
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '送信中... <span class="loading"></span>';
+                
+                // GAS Web Appにデータを送信
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwNqitBfTAdyao6uRbQ1i-nEdWQBFro1WQ_-TZKmbCc4V3OHKuPnDsIZ5cROgG_bMObRg/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                // no-corsモードではレスポンスを読めないので、成功したと仮定
+                
+                // 注文リストをクリア
+                orderList = [];
+                localStorage.removeItem('orderList');
+                updateOrderListButton();
+                
+                // 注文完了メッセージ
+                alert(`注文が完了しました。\n注文ID: ${orderData.orderId}\n合計金額: ¥${orderData.total.toLocaleString()}\n確認メールを送信しました。`);
+                
+                // フォームをリセット
+                document.querySelectorAll('.order-form input, .order-form select, .order-form textarea').forEach(input => {
+                    input.value = '';
+                });
+                
+                // ホームページに戻る
+                showPage('home');
+                
+            } catch (error) {
+                console.error('注文処理中にエラーが発生しました:', error);
+                alert('注文の送信中にエラーが発生しました。もう一度お試しください。');
+            } finally {
+                // ボタンを元に戻す
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        }
+    </script>
+</body>
+</html>
