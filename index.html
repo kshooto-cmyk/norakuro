@@ -668,49 +668,12 @@
         let products = [];
         let orderList = JSON.parse(localStorage.getItem('orderList')) || [];
 
-
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-        // products.jsonから商品データを取得
-         fetch('products.json')
-        .then(response => {
-            // HTTPステータスコードをチェックし、問題があればエラーを投げる
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            // レスポンスボディをJSONとして解析
-            return response.json();
-        })
-        .then(data => {
-            // 取得したデータを `products` 配列に代入
-            // 既存のコードは日本語キーなので、キー名を合わせるか、
-            // products.jsonを英語キーに修正してください
-            products = data.map(item => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                discountRate: item.discountRate,
-                imageURL: item.imageURL,
-                category: item.category
-            }));
-            // 商品を表示
-            displayProducts(products);
-        })
-        .catch(error => {
-            // エラーが発生した場合の処理
-            console.error('商品データの取得中にエラーが発生しました:', error);
-            const container = document.getElementById('products-container');
-            container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
-        });
-
-             updateOrderListButton();
-        });
-
-
-
-        
-        
+        // JSONデータを直接埋め込み（CORS制限回避）
+        const jsonData = [
+            {"商品ID":"a1","商品名":"ボールペン","価格":350,"割引率":0,"画像URL":"","カテゴリ":"ペン"},
+            {"商品ID":"a2","商品名":"メタルボールペン","価格":500,"割引率":0,"画像URL":"","カテゴリ":""},
+            {"商品ID":"b1","商品名":"レザー手帳カバー","価格":1500,"割引率":0,"画像URL":"","カテゴリ":"手帳"}
+        ];
 
         // ページ表示制御
         function showPage(pageId) {
@@ -735,11 +698,35 @@
         }
 
         // ページ読み込み時に商品データを設定
+        document.addEventListener('DOMContentLoaded', function() {
+    fetch('products.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // 取得したデータを `products` 配列に代入し、IDを文字列に変換
+        products = data.map(item => ({
+            id: String(item.id), // ★ ここを修正
+            name: item.name,
+            price: item.price,
+            discountRate: item.discountRate,
+            description: item.description || '',
+            imageURL: item.imageURL,
+            category: item.category
+        }));
+        displayProducts(products);
+    })
+    .catch(error => {
+        console.error('商品データの取得中にエラーが発生しました:', error);
+        const container = document.getElementById('products-container');
+        container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
+    });
 
-
-
-
-        
+    updateOrderListButton();
+});
 
         // 商品を表示
         function displayProducts(products) {
@@ -874,11 +861,12 @@
 
         // 注文リストから商品を削除
         function removeFromOrderList(productId) {
-            orderList = orderList.filter(item => item.id !== productId);
-            localStorage.setItem('orderList', JSON.stringify(orderList));
-            displayOrderList();
-            calculateTotal();
-            updateOrderListButton();
+    // product.idが数値であるため、渡された文字列のIDを数値に変換して比較
+    orderList = orderList.filter(item => String(item.id) !== productId); // ★ ここを修正
+    localStorage.setItem('orderList', JSON.stringify(orderList));
+    displayOrderList();
+    calculateTotal();
+    updateOrderListButton();
         }
 
         // 合計金額の計算
@@ -968,7 +956,7 @@
                 submitBtn.innerHTML = '送信中... <span class="loading"></span>';
                 
                 // GAS Web Appにデータを送信
-                const response = await fetch('https://script.google.com/macros/s/AKfycbwNqitBfTAdyao6uRbQ1i-nEdWQBFro1WQ_-TZKmbCc4V3OHKuPnDsIZ5cROgG_bMObRg/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbx6UvzdSdvnv038K4ZF0K5lYjz_1SsQmwTUcpAbrtJAB0EmKAkxxfUH7eIbm9r9OR4aCA/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
