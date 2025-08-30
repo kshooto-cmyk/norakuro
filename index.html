@@ -121,6 +121,19 @@
             min-height: calc(100vh - 200px);
         }
 
+        /* カテゴリセクション */
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            color: var(--main-blue);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
         .products-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -526,8 +539,8 @@
             </div>
             
             <h2 id="products">商品一覧</h2>
-            <div class="products-container" id="products-container">
-                <!-- 商品はJavaScriptで動的に生成 -->
+            <div id="products-by-category">
+                <!-- カテゴリ別商品はJavaScriptで動的に生成 -->
             </div>
         </div>
 
@@ -704,7 +717,7 @@
                     <td>送料、銀行振込手数料</td>
                 </tr>
                 <tr>
-                    <th>引き渡し時期</h3>
+                    <th>引き渡し時期</th>
                     <td>ご注文後、3〜7営業日以内に発送いたします。</td>
                 </tr>
                 <tr>
@@ -742,38 +755,38 @@
         let orderList = JSON.parse(localStorage.getItem('orderList')) || [];
 
         document.addEventListener('DOMContentLoaded', function() {
-        // products.jsonから商品データを取得
-         fetch('products.json')
-        .then(response => {
-            // HTTPステータスコードをチェックし、問題があればエラーを投げる
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            // レスポンスボディをJSONとして解析
-            return response.json();
-        })
-        .then(data => {
-            // 取得したデータを `products` 配列に代入
-            products = data.map(item => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                discountRate: item.discountRate,
-                description: item.description || '',
-                imageURL: item.imageURL,
-                category: item.category
-            }));
-            // 商品を表示
-            displayProducts(products);
-        })
-        .catch(error => {
-            // エラーが発生した場合の処理
-            console.error('商品データの取得中にエラーが発生しました:', error);
-            const container = document.getElementById('products-container');
-            container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
-        });
+            // products.jsonから商品データを取得
+            fetch('products.json')
+                .then(response => {
+                    // HTTPステータスコードをチェックし、問題があればエラーを投げる
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    // レスポンスボディをJSONとして解析
+                    return response.json();
+                })
+                .then(data => {
+                    // 取得したデータを `products` 配列に代入
+                    products = data.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        discountRate: item.discountRate,
+                        description: item.description || '',
+                        imageURL: item.imageURL,
+                        category: item.category
+                    }));
+                    // 商品をカテゴリ別に表示
+                    displayProductsByCategory(products);
+                })
+                .catch(error => {
+                    // エラーが発生した場合の処理
+                    console.error('商品データの取得中にエラーが発生しました:', error);
+                    const container = document.getElementById('products-by-category');
+                    container.innerHTML = '<p class="error-message">商品データの読み込みに失敗しました。</p>';
+                });
 
-             updateOrderListButton();
+            updateOrderListButton();
         });
 
         // ページ表示制御
@@ -798,9 +811,9 @@
             window.scrollTo(0, 0);
         }
 
-        // 商品を表示
-        function displayProducts(products) {
-            const container = document.getElementById('products-container');
+        // 商品をカテゴリ別に表示
+        function displayProductsByCategory(products) {
+            const container = document.getElementById('products-by-category');
             container.innerHTML = '';
             
             if (products.length === 0) {
@@ -808,10 +821,37 @@
                 return;
             }
             
+            // カテゴリごとに商品をグループ化
+            const categories = {};
             products.forEach(product => {
-                const productElement = createProductElement(product);
-                container.appendChild(productElement);
+                if (!categories[product.category]) {
+                    categories[product.category] = [];
+                }
+                categories[product.category].push(product);
             });
+            
+            // 各カテゴリごとにセクションを作成
+            for (const [category, categoryProducts] of Object.entries(categories)) {
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                
+                const title = document.createElement('h3');
+                title.className = 'category-title';
+                title.textContent = category;
+                
+                const productsContainer = document.createElement('div');
+                productsContainer.className = 'products-container';
+                
+                // カテゴリ内の商品を表示
+                categoryProducts.forEach(product => {
+                    const productElement = createProductElement(product);
+                    productsContainer.appendChild(productElement);
+                });
+                
+                section.appendChild(title);
+                section.appendChild(productsContainer);
+                container.appendChild(section);
+            }
         }
 
         // 商品カードの作成（説明欄追加）
@@ -957,7 +997,7 @@
 
         // 注文送信
         async function submitOrder() {
-            // ハニーポットチェック
+            // ハニー�ポットチェック
             const honeyPot = document.getElementById('website').value;
             if (honeyPot) {
                 alert('送信に失敗しました。もう一度お試しください。');
